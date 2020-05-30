@@ -1,14 +1,14 @@
 var objApp;
 var objWindow;
 var pluginPath;
-var pluginData;
+var objPlugin;
 var browserObject;
 var zoom = 100;
 let inited = false;
 
 // Initialize WizNote APIs
 new QWebChannel(qt.webChannelTransport, function (channel) {
-    var objectNames = ["WizExplorerApp", "JSPluginSpec", "JSPluginModuleSpec"];
+    var objectNames = ["WizExplorerApp", "JSPlugin", "JSPluginModule"];
     for (var i = 0; i < objectNames.length; i++) {
         var key = objectNames[i];
         window[key] = channel.objects[key];
@@ -29,13 +29,13 @@ async function initForWebEngine() {
     if (inited) return;
     objApp = window.WizExplorerApp;
     objWindow = objApp.Window;
-    pluginData = window.JSPluginSpec;
-    moduleData = window.JSPluginModuleSpec;
-    pluginPath = pluginData.path;
+    objPlugin = window.JSPlugin;
+    objModule = window.JSPluginModule;
+    pluginPath = objPlugin.PluginPath;
     browserObject = await objWindow.CurrentDocumentBrowserObject();
     await initZoom();
     //
-    moduleData.willShow.connect(() => {
+    objModule.willShow.connect(() => {
         initZoom();
     });
 }
